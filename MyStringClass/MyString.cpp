@@ -6,13 +6,13 @@ MyString::MyString()
 	data = new char[1];
 }
 
-MyString::MyString(const char* x, const char* y, const std::size_t new_length) : length(new_length)
+MyString::MyString(const char* x, const char* y, const std::size_t new_length) : length(new_length) //initialise length to new_length(length of both the concatenated strings)
 {
-	data = new char[new_length + 1];
+	data = new char[new_length + 1]; //+1 for '\0'
 
 	std::size_t idx1 = 0;
 
-	auto concat = [&idx1, this](const char* str)
+	auto concat = [&idx1, this](const char* str) //lambda 4 concat the strings by index
 	{
 		std::size_t idx2 = 0;
 		while (str[idx2] != '\0')
@@ -23,18 +23,18 @@ MyString::MyString(const char* x, const char* y, const std::size_t new_length) :
 
 	concat(x);
 	concat(y);
-	data[new_length] = '\0';
+	data[new_length] = '\0'; //adding the final '\0' at end of new MyString
 }
 
 MyString::MyString(const char* c)
 {
-	if (c == nullptr)
+	if (c == nullptr) //checking 4 nullptr, not sure, if necessary
 	{
 		length = 0;
 		data = new char[1];
 		data[0] = '\0';
 	}
-	else
+	else //"copy" const char* c to char* data
 	{
 		std::size_t n = 0;
 		while (c[n] != '\0') n++;
@@ -53,8 +53,8 @@ const char* MyString::c_str() const
 
 MyString MyString::Concatenate(const MyString str) const
 {
-	const std::size_t new_length = length + str.GetLength();
-	return MyString(data, str.c_str(), new_length);
+	const std::size_t new_length = length + str.GetLength(); //adding lengths, to know length, of the new string
+	return MyString(data, str.c_str(), new_length); //private constructor
 }
 
 std::size_t MyString::GetLength() const
@@ -62,6 +62,7 @@ std::size_t MyString::GetLength() const
 	return length;
 }
 
+//cout(<<) operator override  
 std::ostream& operator<<(std::ostream& os, const MyString& str)
 {
 	std::size_t idx = 0;
