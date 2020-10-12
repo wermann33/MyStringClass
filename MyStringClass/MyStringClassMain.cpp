@@ -16,7 +16,7 @@ int main()
 		std::cout << str1.c_str()[i] << ' ';
 	std::cout << std::endl;
 
-	MyString str4 = str1.Concatenate(str3);
+	MyString str4 = str1.Concatenate(" Welt");
 
 	std::cout << str4 << "[Length: " << str4.GetLength() << ']' << std::endl;
 

@@ -20,7 +20,7 @@ public:
 	const char* c_str() const;
 
 	//destructor
-	~MyString()= default;
+	~MyString();
 
 	MyString Concatenate(const MyString str) const;
 

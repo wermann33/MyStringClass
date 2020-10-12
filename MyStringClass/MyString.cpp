@@ -62,6 +62,11 @@ std::size_t MyString::GetLength() const
 	return length;
 }
 
+MyString::~MyString()
+{
+	delete[] data;
+}
+
 //cout(<<) operator override  
 std::ostream& operator<<(std::ostream& os, const MyString& str)
 {
