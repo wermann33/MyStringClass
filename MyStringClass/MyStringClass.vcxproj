@@ -139,11 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MyString.cpp" />
-    <ClCompile Include="MyStringClassMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MyString.hpp" />
+    <ClCompile Include="wermann.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
