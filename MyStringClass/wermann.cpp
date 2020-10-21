@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 namespace MyString
 {
 	class MyString
@@ -154,7 +153,70 @@ namespace MyString
 			}
 			return os;
 		}
-	};	
+
+		// operator+= overload with argument const Mystring&
+		MyString& operator+= (const MyString& other)
+		{
+			const std::size_t len = length + other.length; //length of updated string
+			auto* str = new char[len + 1]; //+1 for '\0'
+
+			for (std::size_t j = 0; j < length; j++) //copying MyString 1
+				str[j] = data[j];
+
+			for (std::size_t i = 0; i < other.length; i++) //copying MyString 2
+				str[i + length] = other.data[i];
+
+			str[len] = '\0';
+
+			//updating and returning string
+			delete data;
+			length = len;
+			data = str;
+			return *this;
+		}
+
+		// operator+= overload with argument const char*&
+		MyString& operator+= (const char*& other)
+		{
+			std::size_t other_length = 0;
+			while (other[other_length] != '\0') other_length++; //getting length of char*
+
+			const std::size_t len = length + other_length; //length of updated string
+			auto* str = new char[len + 1]; //+1 for '\0'
+
+			for (std::size_t j = 0; j < length; j++) //copying MyString 1
+				str[j] = data[j];
+
+			for (std::size_t i = 0; i < other_length; i++) //copying char*
+				str[i + length] = other[i];
+
+			str[len] = '\0';
+			//updating and returning string
+			delete data;
+			length = len;
+			data = str;
+			return *this;
+		}
+
+		friend MyString operator+ (const MyString& str1, const MyString& str2) //friend, because assigned to a new MyString
+		{
+			MyString newString = str1.Concatenate(str2);
+			return  newString;  //using the +=overload instead would cause unnecessary copying
+		}
+
+		friend MyString operator+ (const MyString& str1, const char*& str2) //friend, because assigned to a new MyString
+		{
+			MyString newString = str1;
+			newString += str2;  //+= useful here, no additional copy
+			return newString;
+		}
+
+		friend MyString operator+ (const char*& str1, const MyString& str2) //friend, because assigned to a new MyString
+		{
+			MyString newString = MyString(str1).Concatenate(str2);
+			return newString;
+		}
+	};
 }
 
 int main()
@@ -219,5 +281,38 @@ int main()
 
 	std::cout << mao1 << ", Length: " << mao1.GetLength() << std::endl; //returns "nullptr", and length 0
 
+
+	//Testing operator+= (const MyString& s)
+	MyString::MyString s1("Hello ");
+	const MyString::MyString s2("World");
+	s1 += s2;
+	std::cout << s1 << std::endl;
+
+	//Testing operator+= (const char*& s)
+	MyString::MyString s3("Goodbye ");
+	const char* s4 = "World";
+	const char* s5 = "!";
+	s3 += s4;
+	s3 += s5;
+	std::cout << s3 << std::endl;
+
+	//Testing operator+ 2 MyStrings
+	MyString::MyString s6("Dibedib");
+	MyString::MyString s7("edam");
+	MyString::MyString s8 = s6 + s7;
+	std::cout << s8 << std::endl;
+	std::cout << s6 << std::endl; //is still "Dibedib"
+
+	//Testing operator+ MyString + char*&
+	const char* c1 = "edam";
+	MyString::MyString s9 = s6 + c1;
+	std::cout << s9 << std::endl;
+	std::cout << s6 << std::endl; //is still "Dibedib"
+
+	//Testing operator+ char*& + MyString
+	const char* c2 = "Dibedib";
+	MyString::MyString s10 = c2 + s7;;
+	std::cout << s10 << std::endl;
+	std::cout << s6 << std::endl; //is still "Dibedib"
 	return 0;
 }
