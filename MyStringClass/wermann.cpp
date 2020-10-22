@@ -198,25 +198,33 @@ namespace MyString
 			return *this;
 		}
 
-		friend MyString operator+ (const MyString& str1, const MyString& str2) //friend, because assigned to a new MyString
+		friend MyString operator+ (const MyString& str1, const MyString& str2) //friend, because assigned to a new MyString (2 arguments needed)
 		{
 			MyString newString = str1.Concatenate(str2);
 			return  newString;  //using the +=overload instead would cause unnecessary copying
 		}
 
-		friend MyString operator+ (const MyString& str1, const char*& str2) //friend, because assigned to a new MyString
+		friend MyString operator+ (const MyString& str1, const char*& str2) //friend, because assigned to a new MyString (2 arguments needed)
 		{
 			MyString newString = str1;
 			newString += str2;  //+= useful here, no additional copy
 			return newString;
 		}
 
-		friend MyString operator+ (const char*& str1, const MyString& str2) //friend, because assigned to a new MyString
+		friend MyString operator+ (const char*& str1, const MyString& str2) //friend, because assigned to a new MyString (2 arguments needed)
 		{
 			MyString newString = MyString(str1).Concatenate(str2);
 			return newString;
 		}
+
+		//conversion function to const char*
+		operator const char*() const
+		{
+			return this->c_str();
+		}
+		
 	};
+
 }
 
 int main()
@@ -314,5 +322,9 @@ int main()
 	MyString::MyString s10 = c2 + s7;;
 	std::cout << s10 << std::endl;
 	std::cout << s6 << std::endl; //is still "Dibedib"
+
+	//Testing conversion function to const char*
+	puts(s10);
+	
 	return 0;
 }
