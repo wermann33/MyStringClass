@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include <algorithm>
+#include <iterator>
 
 namespace MyString
 {
@@ -229,8 +230,9 @@ namespace MyString
 		class Iterator
 		{
 		public:
-			Iterator(char* charPointer = nullptr) :_charPointer(charPointer) {}  //Initzialise charPointer
-			
+
+			Iterator(char* charPointer = nullptr) :_charPointer(charPointer) { }  //Initzialise charPointer
+
 			bool operator!=(const Iterator& iterator) const
 			{
 				return _charPointer != iterator._charPointer;
@@ -243,7 +245,7 @@ namespace MyString
 			{
 				return *_charPointer;
 			}
-			
+
 		private:
 			char* _charPointer;
 		};
@@ -258,6 +260,17 @@ namespace MyString
 		}
 	};
 }
+
+//necassary for gcc to use std::find
+template<>
+struct std::iterator_traits<MyString::MyString::Iterator>
+{
+	typedef std::ptrdiff_t difference_type;
+	typedef char value_type;
+	typedef const char& reference; 
+	typedef const char* pointer;
+	typedef std::input_iterator_tag iterator_category;
+};
 
 int main()
 {
