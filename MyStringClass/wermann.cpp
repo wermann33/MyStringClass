@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cassert>
+#include <algorithm>
 
 namespace MyString
 {
@@ -218,13 +220,43 @@ namespace MyString
 		}
 
 		//conversion function to const char*
-		operator const char*() const
+		operator const char* () const
 		{
 			return this->c_str();
 		}
-		
-	};
 
+
+		class Iterator
+		{
+		public:
+			Iterator(char* charPointer = nullptr) :_charPointer(charPointer) {}  //Initzialise charPointer
+			
+			bool operator!=(const Iterator& iterator) const
+			{
+				return _charPointer != iterator._charPointer;
+			}
+			void operator++()
+			{
+				++_charPointer;
+			}
+			char& operator*() const
+			{
+				return *_charPointer;
+			}
+			
+		private:
+			char* _charPointer;
+		};
+
+		Iterator begin() const //const = no need to manipulate Class
+		{
+			return { data };
+		}
+		Iterator end() const //const = no need to manipulate Class
+		{
+			return { data + GetLength() };
+		}
+	};
 }
 
 int main()
@@ -325,6 +357,19 @@ int main()
 
 	//Testing conversion function to const char*
 	puts(s10);
-	
+
+	//Testing Iterator
+	const MyString::MyString test("Hello World");
+	for (auto it = test.begin(); it != test.end(); ++it) { std::cout << *it << std::endl; }
+	std::cout << std::endl;
+	for (auto& it : test) { std::cout << it << std::endl; }
+	std::cout << std::endl;
+	assert((std::find(test.begin(), test.end(), 'W') != test.end()) == 1);
+	std::cout << (std::find(test.begin(), test.end(), 'W') != test.end()) << std::endl;
+	assert((std::find(test.begin(), test.end(), 'X') != test.end()) == 0);
+	std::cout << (std::find(test.begin(), test.end(), 'X') != test.end()) << std::endl;
+	assert(*test.begin() == 'H');
+	std::cout << *test.begin() << std::endl;
+
 	return 0;
 }
